@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
@@ -11,7 +12,16 @@ public class Main {
         listPeople.add(new Person("Жан-Жак", "Руссо", 62));
         listPeople.add(new Person("Жозе", "Фарейра ди Каштру", 48));
         listPeople.add(new Person("Рикардо", "Изексон дос Сантос-Лейте", 42));
-        Collections.sort(listPeople, new NotableSurnameComparator(4));
+
+        Comparator<Person> comparator = (o1, o2) -> {
+            int wordsSurname1 = o1.getSurname().split("(?U)\\W").length;
+            int wordsSurname2 = o2.getSurname().split("(?U)\\W").length;
+            if (wordsSurname1 > 4 && wordsSurname2 > 4 || wordsSurname1 == wordsSurname2) {
+                return Integer.compare(o2.getAge(), o1.getAge());
+            }
+            return Integer.compare(wordsSurname2, wordsSurname1);
+        };
+        Collections.sort(listPeople, comparator);
         for (Person p : listPeople) {
             System.out.println(p);
         }
